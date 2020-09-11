@@ -14,7 +14,7 @@ class PanelControl
     }
 
     public function action_panel(){
-        if(SessionUtils::load("idPracownika")){
+        if(SessionUtils::load("user_id")){
             $this->generateView();
         } else {
             header("Location: " . App::getConf()->app_url . "/login");

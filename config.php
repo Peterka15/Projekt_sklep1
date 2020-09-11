@@ -9,7 +9,7 @@ $conf->app_root = '/Projekt_sklep1/public';   # project subfolder in domain (rel
 # ---- Database config - values required by Medoo
 $conf->db_type = 'mysql';
 $conf->db_server = 'localhost';
-$conf->db_name = 'shopdb';
+$conf->db_name = 'shopdatabase';
 $conf->db_user = 'root';
 $conf->db_pass = '';
 $conf->db_charset = 'utf8';

@@ -38,12 +38,12 @@ class LoginControl
     public function generateView()
     {
         if ($this->validateLogin()) {
-            SessionUtils::store("idPracownika", $this->accountData["idPracownika"]);
+            SessionUtils::store("user_id", $this->accountData["user_id"]);
             SessionUtils::store("login", $this->accountData["login"]);
-            SessionUtils::store("Stanowisko", $this->accountData["Stanowisko"]);
+            SessionUtils::store("rola", $this->accountData["rola"]);
 
 
-            RoleUtils::addRole($this->accountData["Stanowisko"]);
+            RoleUtils::addRole($this->accountData["rola"]);
 
             Utils::addInfoMessage("Logowanie udane!");
 
@@ -57,7 +57,7 @@ class LoginControl
     public function validateLogin()
     {
         echo __FUNCTION__;
-        if (!empty(SessionUtils::load("idPracownika", true))) return true;
+        if (!empty(SessionUtils::load("user_id", true))) return true;
 
 
         $v = new Validator();
@@ -75,15 +75,15 @@ class LoginControl
         if (App::getMessages()->isError()) return false;
 
         try {
-            $this->accountData = App::getDB()->get("pracownicy",
+            $this->accountData = App::getDB()->get("uzytkownicy",
                  [
-                    'idPracownika',
-                    'Stanowisko',
-                    'Imie',
-                    'Nazwisko'
+                    'user_id',
+                    'rola',
+                    'imie',
+                    'nazwisko'
                 ], [
                     'login' => $this->form->login,
-                    'haslo' => ($this->form->password)
+                    'haslo' => $this->form->password
                 ]);
 
             if (empty($this->accountData)) {
