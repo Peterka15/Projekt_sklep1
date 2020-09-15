@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.34-dev-7, created on 2020-09-11 19:02:17
+/* Smarty version 3.1.34-dev-7, created on 2020-09-16 01:48:32
   from 'E:\xampp\htdocs\Projekt_sklep1\app\views\templates\messages.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.34-dev-7',
-  'unifunc' => 'content_5f5bad9917fca7_35086951',
+  'unifunc' => 'content_5f6152d0876b58_93201843',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '6f1f4e1a2f1ac78cc85512c38b2f5c848af89e7c' => 
     array (
       0 => 'E:\\xampp\\htdocs\\Projekt_sklep1\\app\\views\\templates\\messages.tpl',
-      1 => 1599838482,
+      1 => 1600211583,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5f5bad9917fca7_35086951 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5f6152d0876b58_93201843 (Smarty_Internal_Template $_smarty_tpl) {
 if ($_smarty_tpl->tpl_vars['msgs']->value->isError()) {?>
 				<h4>Wystąpiły błędy: </h4>
 				<ol class="err">

@@ -39,7 +39,7 @@ class LoginControl
     {
         if ($this->validateLogin()) {
             SessionUtils::store("user_id", $this->accountData["user_id"]);
-            SessionUtils::store("login", $this->accountData["login"]);
+            SessionUtils::store("login", $this->form->login);
             SessionUtils::store("rola", $this->accountData["rola"]);
 
 
@@ -47,7 +47,7 @@ class LoginControl
 
             Utils::addInfoMessage("Logowanie udane!");
 
-            header("Location: " . App::getConf()->app_url . "/panel");
+            App::getRouter()->redirectTo('supplyNew');
         } else {
             App::getSmarty()->assign('page_title', 'Zaloguj się');
             App::getSmarty()->display('SignInView.tpl');
