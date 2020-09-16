@@ -17,8 +17,12 @@ class PanelControl
         if(SessionUtils::load("rola")== 'Admin'){
             header("Location: " . App::getConf()->app_url . "/supplyNew");
             
-        } else {
-           $this->generateView();
+    } else if  (SessionUtils::load("rola")== 'User'){
+          header("Location: " . App::getConf()->app_url . "/supplyNew");
+          var_dump(action_panel);
+        }
+        else{
+            $this ->generateView();
         }
     }
 }

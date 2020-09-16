@@ -4,7 +4,7 @@
 
  <div class="pure-menu pure-menu-horizontal bottom-margin">
 	<a href="{$conf->action_url}logout"  class="pure-menu-heading pure-menu-link">wyloguj</a>
-	<span style="float:right;">użytkownik: {$login}</span>
+	<span style="float:right;">użytkownik: {$login} rola: {$rola}  </span>
 </div>
 
 
@@ -18,10 +18,11 @@
 <table id="tab_people" class="pure-table pure-table-bordered">
 <thead>
 	<tr>
-		<th>id produktu</th>
+	 {if $rola == 'Admin'}	<th>id produktu</th> {/if}
 		<th>nazwa</th>
 		<th>cena</th>
 		<th>ilosc</th>
+          
 	</tr>
 </thead>
 <tbody>
@@ -29,16 +30,19 @@
 {strip}
 	<tr>
             <td> </td>
-                <td>{$s["idProduktu"]}</td>
+         {if $rola == 'Admin'}<td>{$s["idProduktu"]}</td>{/if}
 		<td>{$s["nazwa"]}</td>
 		<td>{$s["cena"]}</td>
 		<td>{$s["ilosc"]}</td>
+         
+		{if $rola == 'Admin'}
 		<td>
                     
 			<a class="button-small pure-button button-secondary" href="{$conf->action_url}supplyEdit/{$s['idProduktu']}">Edytuj</a>
 			&nbsp;
 			<a class="button-small pure-button button-warning" href="{$conf->action_url}supplyDelete/{$s['idProduktu']}">Usuń</a>
 		</td>
+		{/if}
 	</tr>
 {/strip}
 {/foreach}
@@ -49,7 +53,7 @@
 
 
 
-
+{if $rola == 'Admin'}
 <div class="bottom-margin">
 <form action="{$conf->action_root}supplySave" method="post" class="pure-form pure-form-aligned">
 	<fieldset>
@@ -68,12 +72,12 @@
         </div>
 		<div class="pure-controls">
 			<input type="submit" class="pure-button pure-button-primary" value="Zapisz"/>
-			<a class="pure-button button-secondary" href="{$conf->action_root}">Powrót</a>
 		</div>
 	</fieldset>
     <input type="hidden" name="id" value="{$form->id}">
 </form>	
 </div>
+{/if}
 
 {/block}
 

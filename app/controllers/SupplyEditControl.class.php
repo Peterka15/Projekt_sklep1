@@ -14,14 +14,19 @@ class SupplyEditControl
     private $form; //dane formularza
     private $records;
     private $login;
+    private $rola;
+ 
 
     public function __construct()
     {
         //stworzenie potrzebnych obiektów
         $this->form = new SupplyForm();
         $this->login = SessionUtils::load('login', true);
+        $this->rola = SessionUtils::load("rola", true);
+       
     }
 
+    
     public function validateSave()
     {
         //0. Pobranie parametrów z walidacją
@@ -85,6 +90,7 @@ class SupplyEditControl
         App::getSmarty()->assign('form', $this->form); // dane formularza dla widoku
         App::getSmarty()->assign('supply', $this->records);  // lista rekordów z bazy danych
         App::getSmarty()->assign('login', $this->login);  // lista rekordów z bazy danych
+        App::getSmarty()->assign('rola', $this->rola);
         App::getSmarty()->display('SupplyEdit.tpl');
 
     }

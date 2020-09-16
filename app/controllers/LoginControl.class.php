@@ -103,5 +103,7 @@ class LoginControl
         RoleUtils::removeRole("logged");
         SessionUtils::remove("id");
         SessionUtils::remove("login");
+        session_destroy();
+        App::getRouter()->redirectTo('login');
     }
 }
