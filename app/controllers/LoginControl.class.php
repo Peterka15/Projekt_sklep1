@@ -32,7 +32,7 @@ class LoginControl
     {
         $this->form->login = ParamUtils::getFromRequest('login');
         $this->form->password = ParamUtils::getFromRequest('password');
-        var_dump($this->form);
+       // var_dump($this->form);
     }
 
     public function generateView()

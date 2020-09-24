@@ -87,6 +87,7 @@ class SupplyEditControl
 
     public function generateView()
     {
+        App::getSmarty()->assign('user_id', SessionUtils::load('user_id', true));
         App::getSmarty()->assign('form', $this->form); // dane formularza dla widoku
         App::getSmarty()->assign('supply', $this->records);  // lista rekordów z bazy danych
         App::getSmarty()->assign('login', $this->login);  // lista rekordów z bazy danych

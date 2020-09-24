@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 16 Wrz 2020, 00:34
--- Wersja serwera: 10.4.13-MariaDB
--- Wersja PHP: 7.2.27
+-- Czas generowania: 22 Wrz 2020, 14:17
+-- Wersja serwera: 10.4.14-MariaDB
+-- Wersja PHP: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -25,13 +24,35 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `koszyk`
+--
+
+CREATE TABLE `koszyk` (
+  `user_id` int(11) NOT NULL,
+  `produkt_id` int(11) NOT NULL,
+  `ilosc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `koszyk`
+--
+
+INSERT INTO `koszyk` (`user_id`, `produkt_id`, `ilosc`) VALUES
+(1, 1, 1),
+(1, 2, 1),
+(1, 3, 1),
+(2, 3, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `produkty`
 --
 
 CREATE TABLE `produkty` (
   `idProduktu` int(11) NOT NULL,
   `nazwa` varchar(45) DEFAULT NULL,
-  `cena` int(11) DEFAULT NULL,
+  `cena` float DEFAULT NULL,
   `ilosc` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -42,7 +63,7 @@ CREATE TABLE `produkty` (
 INSERT INTO `produkty` (`idProduktu`, `nazwa`, `cena`, `ilosc`) VALUES
 (1, 'Klawiatura', 100, 3),
 (2, 'Myszka', 150, 40),
-(3, NULL, NULL, NULL);
+(3, 'Płot', 5, 30);
 
 -- --------------------------------------------------------
 
@@ -77,8 +98,8 @@ CREATE TABLE `uzytkownicy` (
 --
 
 INSERT INTO `uzytkownicy` (`user_id`, `imie`, `nazwisko`, `rola`, `login`, `haslo`) VALUES
-(1, 'Jan', 'Kowalski', 'Admin', 'jank', '321'),
-(2, 'Adam', 'Kot', 'User', 'akot', '333');
+(1, 'Jan', 'Kowalski', 'Admin', 'admin', 'admin'),
+(2, 'Adam', 'Kot', 'User', 'user', 'user');
 
 -- --------------------------------------------------------
 
@@ -95,6 +116,12 @@ CREATE TABLE `zamowienia` (
 --
 -- Indeksy dla zrzutów tabel
 --
+
+--
+-- Indeksy dla tabeli `koszyk`
+--
+ALTER TABLE `koszyk`
+  ADD PRIMARY KEY (`user_id`,`produkt_id`);
 
 --
 -- Indeksy dla tabeli `produkty`
@@ -130,7 +157,7 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT dla tabeli `produkty`
 --
 ALTER TABLE `produkty`
-  MODIFY `idProduktu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idProduktu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT dla tabeli `uzytkownicy`
