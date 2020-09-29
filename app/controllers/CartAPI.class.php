@@ -29,7 +29,7 @@ class CartAPI
 
         $id = $_GET['id'];
         $query =
-            "SELECT `koszyk`.`user_id`, `koszyk`.`produkt_id`, `koszyk`.`ilosc`, `produkty`.`nazwa`, `produkty`.`cena`"
+              "SELECT `koszyk`.`user_id`, `koszyk`.`produkt_id`, `koszyk`.`ilosc`, `produkty`.`nazwa`, `produkty`.`cena`"
             . "FROM `koszyk` "
             . "JOIN `produkty` "
             . "ON `produkty`.`idProduktu` = `koszyk`.`produkt_id` "
@@ -111,4 +111,8 @@ class CartAPI
 
         echo '{"message": "OK", "updated_rows": ' . $updated . '}';
     }
+    
+    
+    
+    
 }

@@ -18,6 +18,7 @@
     <legend>Magazyn</legend>
     <div class="bottom-margin">
     </div>
+     <a href="{$conf->action_url}showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówienia</a>
     <table id="tab_supply" class="pure-table pure-table-bordered">
         <thead>
         <tr>
@@ -36,7 +37,7 @@
                 <tr>
                     <td></td>
                     {if $rola == 'Admin'}
-                        <td>{$s["idProduktu"]}</td>{/if}
+                    <td>{$s["idProduktu"]}</td>{/if}
                     <td>{$s["nazwa"]}</td>
                     <td>{$s["cena"]}</td>
                     <td id="produkt_{$s["idProduktu"]}">{$s["ilosc"]}</td>
@@ -113,6 +114,7 @@
         </script>
 
         </tbody>
+        
     </table>
     {if $rola == 'Admin'}
         <div class="bottom-margin">
@@ -139,13 +141,14 @@
             </form>
         </div>
     {/if}
+    
     <legend>Koszyk</legend>
     <table id="tab_supply" class="pure-table pure-table-bordered">
         <thead>
         <tr>
-            <th>nazwa</th>
-            <th>cena</th>
-            <th>ilosc</th>
+            <th>Nazwa</th>
+            <th>Cena</th>
+            <th>Ilosc</th>
             <th>Akcje</th>
         </tr>
         </thead>
@@ -154,6 +157,7 @@
 
         </tbody>
     </table>
+    <a href="{$conf->action_url}getOrder" class="pure-menu-heading pure-menu-link">Zamów zawartość koszyka</a>
 {/block}
 
 

@@ -56,7 +56,7 @@ class LoginControl
 
     public function validateLogin()
     {
-        echo __FUNCTION__;
+       // echo __FUNCTION__;
         if (!empty(SessionUtils::load("user_id", true))) return true;
 
 
