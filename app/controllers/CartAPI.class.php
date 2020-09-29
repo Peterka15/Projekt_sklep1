@@ -1,14 +1,13 @@
-<?php /** @noinspection SqlResolve */
+<?php
 
+/** @noinspection SqlResolve */
 
 namespace app\controllers;
-
 
 use core\App;
 use Exception;
 
-class CartAPI
-{
+class CartAPI {
     /*
      * JSON DATA:
      * {
@@ -19,8 +18,8 @@ class CartAPI
      *      cena: FLOAT
      * }
      */
-    public function action_cartGet()
-    {
+
+    public function action_cartGet() {
         header('Content-Type: application/json');
 
         if (!isset($_GET) || !isset($_GET['id'])) {
@@ -28,12 +27,11 @@ class CartAPI
         }
 
         $id = $_GET['id'];
-        $query =
-              "SELECT `koszyk`.`user_id`, `koszyk`.`produkt_id`, `koszyk`.`ilosc`, `produkty`.`nazwa`, `produkty`.`cena`"
-            . "FROM `koszyk` "
-            . "JOIN `produkty` "
-            . "ON `produkty`.`idProduktu` = `koszyk`.`produkt_id` "
-            . "WHERE `koszyk`.`user_id` = $id";
+        $query = "SELECT `koszyk`.`user_id`, `koszyk`.`produkt_id`, `koszyk`.`ilosc`, `produkty`.`nazwa`, `produkty`.`cena`"
+                . "FROM `koszyk` "
+                . "JOIN `produkty` "
+                . "ON `produkty`.`idProduktu` = `koszyk`.`produkt_id` "
+                . "WHERE `koszyk`.`user_id` = $id";
 
         try {
             $koszyk = App::getDB()->query($query)->fetchAll();
@@ -55,7 +53,6 @@ class CartAPI
 
                 return $rekord;
             }, $koszyk);
-
         } catch (Exception $e) {
             die('{"message": "ERROR: Exception: ' . $e->getMessage() . '"}');
         }
@@ -63,8 +60,7 @@ class CartAPI
         echo json_encode($koszyk);
     }
 
-    public function action_cartPost()
-    {
+    public function action_cartPost() {
         header('Content-Type: application/json');
 
         if (!isset($_GET) || !isset($_GET['id'])) {
@@ -86,19 +82,36 @@ class CartAPI
         $updated = 0;
 
         try {
-            if($full){
+            if ($full) {
                 App::getDB()->query("DELETE FROM `koszyk` WHERE `user_id` = $user_id");
             }
 
+       
+            
+            
+            
             foreach ($koszyk as $pozycja) {
+                
+               
+                
                 $produkt_id = $pozycja['produkt_id'];
                 $produkt_ilosc = $pozycja['ilosc'];
+                
+               $ilosc= App::getDB()->query("SELECT `ilosc` FROM `produkty` WHERE `idProduktu` = $produkt_id" )->fetchAll();
+                 
+               
+               
+                 $ilosc_databases = intval($ilosc[0]["ilosc"]);
+                
+                 if($ilosc_databases < $produkt_ilosc){
+                     throw new Exception("Proszę tak nie robić");
+                 }
 
                 //Insert lub update
                 $query = "INSERT INTO `koszyk` (`user_id`, `produkt_id`, `ilosc`) "
-                    . "VALUES($user_id, $produkt_id, $produkt_ilosc) "
-                    . "ON DUPLICATE KEY "
-                    . "UPDATE `ilosc` = $produkt_ilosc";
+                        . "VALUES($user_id, $produkt_id, $produkt_ilosc) "
+                        . "ON DUPLICATE KEY "
+                        . "UPDATE `ilosc` = $produkt_ilosc";
 
                 $pdo = App::getDB()->query($query);
 
@@ -111,8 +124,5 @@ class CartAPI
 
         echo '{"message": "OK", "updated_rows": ' . $updated . '}';
     }
-    
-    
-    
-    
+
 }

@@ -10,10 +10,12 @@ use Exception;
 class OrderControl {
 
     private $records;
+    
+    private $rola;
 
     public function action_getOrder() {
         $id = SessionUtils::load('user_id', true);
-        $query = "SELECT `koszyk`.`user_id`, `koszyk`.`produkt_id`, `koszyk`.`ilosc`, `produkty`.`nazwa`, `produkty`.`cena`"
+        $query = "SELECT `koszyk`.`user_id`, `koszyk`.`produkt_id`, `koszyk`.`ilosc` as 'koszyk_ilosc', `produkty`.`nazwa`, `produkty`.`cena`, `produkty`.`ilosc`, `produkty`.`idProduktu`"
                 . "FROM `koszyk` "
                 . "JOIN `produkty` "
                 . "ON `produkty`.`idProduktu` = `koszyk`.`produkt_id` "
@@ -27,9 +29,11 @@ class OrderControl {
                 //Konwertuj stringi na int/float
                 $rekord['user_id'] = intval($rekord['user_id']);
                 $rekord['produkt_id'] = intval($rekord['produkt_id']);
-                $rekord['ilosc'] = intval($rekord['ilosc']);
+                $rekord['koszyk_ilosc'] = intval($rekord['koszyk_ilosc']);
                 $rekord['cena'] = floatval($rekord['cena']);
-
+                $rekord['ilosc'] = intval($rekord['ilosc']);
+                $rekord['idProduktu'] = intval($rekord['idProduktu']);
+                 
                 //Usunięcie niechcianych indeksów
                 unset($rekord["0"]);
                 unset($rekord["1"]);
@@ -60,15 +64,27 @@ class OrderControl {
             $insert_id = $database->id();
 
             foreach ($orders as $pozycja) {
-                $produkt_id = $pozycja['produkt_id'];
+                
+                $koszyk_product_id = $pozycja['produkt_id'];
+                $koszyk_product_ilosc = $pozycja['koszyk_ilosc'];
                 $produkt_ilosc = $pozycja['ilosc'];
                 $produkt_nazwa = $pozycja['nazwa'];
                 $produkt_cena = $pozycja ['cena'];
+                $produkt_id = $pozycja['idProduktu'];
 
                 //Insert lub update
+                
+                $new_ilosc = $produkt_ilosc - $koszyk_product_ilosc;
+                
+                $update = "UPDATE `produkty` SET `ilosc` = $new_ilosc WHERE `idProduktu` = $produkt_id ";
+                
+                 App::getDB()->query($update);
+                
+                
                 $query = "INSERT INTO `produkty_zamowienia` (`idProduktu`,  `cena`, `ilosc`,`idZamowienia` ) "
-                        . "VALUES($produkt_id, $produkt_cena ,$produkt_ilosc, $insert_id ) ";
+                        . "VALUES($koszyk_product_id, $produkt_cena ,$koszyk_product_ilosc, $insert_id ) ";
 
+                
                 App::getDB()->query($query);
 
                 // INSERT i UPDATE jako jedna zmiana
@@ -80,12 +96,16 @@ class OrderControl {
             die('{"message": "ERROR: Exception: "' . $e->getMessage() . '"}');
         }
 
-        echo '{"message": "pomyślnie dokonano zamówienia"}';
+        $this->prepareOrder();
     }
 
     public function action_showOrder() {
+        $this->prepareOrder();
+    }
 
+    public function prepareOrder() {
 
+        $this->login = SessionUtils::load('login', true);
         $id = SessionUtils::load('user_id', true);
         $this->rola = SessionUtils::load("rola", true);
 
@@ -94,20 +114,24 @@ class OrderControl {
         try {
             if (SessionUtils::load("rola", true) == 'Admin') {
 
-                $query = "SELECT `zamowienia`.`idZamowienia`, `zamowienia`.`data`,"
+                $query = "SELECT `zamowienia`.`idZamowienia`, `zamowienia`.`data`, `produkty`.`nazwa`,"
                         . "`produkty_zamowienia`.`idProduktu`, `produkty_zamowienia`.`cena`,`produkty_zamowienia`.`ilosc`, `uzytkownicy`.`imie`, `uzytkownicy`.`nazwisko`"
                         . "FROM `zamowienia` "
                         . "JOIN `produkty_zamowienia`"
                         . " ON `zamowienia`.`idZamowienia` = `produkty_zamowienia`.`idZamowienia` "
                         . "JOIN `uzytkownicy`"
-                        . " ON `zamowienia`.`user_id` = `uzytkownicy`.`user_id` ";
+                        . " ON `zamowienia`.`user_id` = `uzytkownicy`.`user_id`  "
+                        . "JOIN `produkty`"
+                        . "ON `produkty_zamowienia`.`idProduktu` = `produkty`.`idProduktu`";
             } else if (SessionUtils::load("rola", true) == 'User') {
 
-                $query = "SELECT `zamowienia`.`idZamowienia`, `zamowienia`.`data`, "
-                        . "`produkty_zamowienia`.`idProduktu`, `produkty_zamowienia`.`cena`,`produkty_zamowienia`.`ilosc`"
+                $query = "SELECT `zamowienia`.`idZamowienia`, `zamowienia`.`data`,`produkty`.`nazwa`,"
+                        . "`produkty_zamowienia`.`cena`,`produkty_zamowienia`.`ilosc`"
                         . "FROM `zamowienia` "
                         . "JOIN `produkty_zamowienia`"
-                        . "ON `zamowienia`.`idZamowienia` = `produkty_zamowienia`.`idZamowienia` "
+                        . "ON `zamowienia`.`idZamowienia` = `produkty_zamowienia`.`idZamowienia`"
+                        . "JOIN `produkty`"
+                        . "ON `produkty_zamowienia`.`idProduktu` = `produkty`.`idProduktu`"
                         . "WHERE `zamowienia`.`user_id` = $id";
             } else {
                 throw new Exception("bład dostępu");
@@ -126,10 +150,9 @@ class OrderControl {
 
     public function generateView() {
 
-//        App::getSmarty()->assign('user_id', SessionUtils::load('user_id', true));
+       App::getSmarty()->assign('user_id', SessionUtils::load('user_id', true));
 //        App::getSmarty()->assign('form', $this->form); // dane formularza dla widoku
-//        App::getSmarty()->assign('supply', $this->records);  // lista rekordów z bazy danych
-//        App::getSmarty()->assign('login', $this->login);  // lista rekordów z bazy danych
+        App::getSmarty()->assign('login', $this->login);  // lista rekordów z bazy danych
         App::getSmarty()->assign('rola', $this->rola);
         App::getSmarty()->assign('records', $this->records);
         App::getSmarty()->display('OrderView.tpl');

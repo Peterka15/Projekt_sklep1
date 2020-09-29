@@ -13,10 +13,10 @@ class PanelControl {
     }
 
     public function action_panel() {
-        if (SessionUtils::load("rola",true) == 'Admin') {
+        if (SessionUtils::load("rola", true) == 'Admin') {
             header("Location: " . App::getConf()->app_url . "/supplyNew");
-        } else if (SessionUtils::load("rola",true) == 'User') {
-          //  header("Location: " . App::getConf()->app_url . "/supplyNew");
+        } else if (SessionUtils::load("rola", true) == 'User') {
+            //  header("Location: " . App::getConf()->app_url . "/supplyNew");
             echo "user";
         } else {
             $this->generateView();

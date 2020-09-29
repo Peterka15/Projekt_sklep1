@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.34-dev-7, created on 2020-09-27 20:30:11
+/* Smarty version 3.1.34-dev-7, created on 2020-09-29 23:10:00
   from 'E:\xampp\htdocs\Projekt_sklep1\app\views\SupplyEdit.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.34-dev-7',
-  'unifunc' => 'content_5f70da3398aaa5_61191575',
+  'unifunc' => 'content_5f73a2a82ae668_09857916',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '9640832a154ed5725d3d9796b6a9fa2f3002d7d0' => 
     array (
       0 => 'E:\\xampp\\htdocs\\Projekt_sklep1\\app\\views\\SupplyEdit.tpl',
-      1 => 1601231410,
+      1 => 1601413799,
       2 => 'file',
     ),
   ),
@@ -21,7 +21,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:messages.tpl' => 1,
   ),
 ),false)) {
-function content_5f70da3398aaa5_61191575 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5f73a2a82ae668_09857916 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_loadInheritance();
 $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 ?>
@@ -30,7 +30,7 @@ $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 
 
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_7850127935f70da33969903_04501828', 'content');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1852765905f73a2a82433e6_16974126', 'content');
 ?>
 
 
@@ -46,12 +46,12 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_7850127935f70da339
 <?php $_smarty_tpl->inheritance->endChild($_smarty_tpl, "main.tpl");
 }
 /* {block 'content'} */
-class Block_7850127935f70da33969903_04501828 extends Smarty_Internal_Block
+class Block_1852765905f73a2a82433e6_16974126 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'content' => 
   array (
-    0 => 'Block_7850127935f70da33969903_04501828',
+    0 => 'Block_1852765905f73a2a82433e6_16974126',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -85,7 +85,7 @@ showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówie
         <thead>
         <tr>
             <?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin') {?>
-                <th>id produktu</th>
+            <th>id produktu</th>
             <?php }?>
             <th>nazwa</th>
             <th>cena</th>

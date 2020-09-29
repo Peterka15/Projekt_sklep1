@@ -8,27 +8,20 @@ use core\ParamUtils;
 use core\SessionUtils;
 use core\Utils;
 
-class SupplyEditControl
-{
+class SupplyEditControl {
 
     private $form; //dane formularza
     private $records;
     private $login;
     private $rola;
- 
 
-    public function __construct()
-    {
+    public function __construct() {
         //stworzenie potrzebnych obiektów
         $this->form = new SupplyForm();
         $this->login = SessionUtils::load('login', true);
-        $this->rola = SessionUtils::load("rola", true);
-       
     }
 
-    
-    public function validateSave()
-    {
+    public function validateSave() {
         //0. Pobranie parametrów z walidacją
         $this->form->name = ParamUtils::getFromRequest('name', true, 'Błędne wywołanie aplikacji');
         $this->form->price = ParamUtils::getFromRequest('cena', true, 'Błędne wywołanie aplikacji');
@@ -55,19 +48,16 @@ class SupplyEditControl
         return !App::getMessages()->isError();
     }
 
-
     // Walidacja danych przed zapisem (nowe dane lub edycja).
 
-    public function action_supplyNew()
-    {
+    public function action_supplyNew() {
         $this->supplyList();
         $this->generateView();
     }
 
     //validacja danych przed wyswietleniem do edycji
 
-    public function supplyList()
-    {
+    public function supplyList() {
 
         try {
             $this->records = App::getDB()->select("produkty", [
@@ -85,21 +75,18 @@ class SupplyEditControl
         }
     }
 
-    public function generateView()
-    {
+    public function generateView() {
         App::getSmarty()->assign('user_id', SessionUtils::load('user_id', true));
         App::getSmarty()->assign('form', $this->form); // dane formularza dla widoku
         App::getSmarty()->assign('supply', $this->records);  // lista rekordów z bazy danych
         App::getSmarty()->assign('login', $this->login);  // lista rekordów z bazy danych
         App::getSmarty()->assign('rola', $this->rola);
         App::getSmarty()->display('SupplyEdit.tpl');
-
     }
 
     //wysiweltenie rekordu do edycji wskazanego parametrem 'id'
 
-    public function action_supplyEdit()
-    {
+    public function action_supplyEdit() {
         // 1. walidacja id osoby do edycji
         if ($this->validateEdit()) {
 
@@ -114,7 +101,8 @@ class SupplyEditControl
                 Utils::addErrorMessage('Wystąpił błąd podczas pobierania rekordów');
                 if (App::getConf()->debug)
                     Utils::addErrorMessage($e->getMessage());
-                else  $this->generateView();
+                else
+                    $this->generateView();
             }
 
 
@@ -139,8 +127,7 @@ class SupplyEditControl
         $this->generateView();
     }
 
-    public function validateEdit()
-    {
+    public function validateEdit() {
 
         //pobierz parametry na potrzeby wyswietlenia danych do edycji
         //z widoku listy osób (parametr jest wymagany)
@@ -148,8 +135,7 @@ class SupplyEditControl
         return !App::getMessages()->isError();
     }
 
-    public function action_supplyDelete()
-    {
+    public function action_supplyDelete() {
         // 1. walidacja id osoby do usuniecia
         if ($this->validateEdit()) {
 
@@ -170,8 +156,7 @@ class SupplyEditControl
         App::getRouter()->redirectTo('supplyNew');
     }
 
-    public function action_supplySave()
-    {
+    public function action_supplySave() {
 
         // 1. Walidacja danych formularza (z pobraniem)
         $this->validateSave();
@@ -201,7 +186,7 @@ class SupplyEditControl
                     "nazwa" => $this->form->name,
                     "cena" => $this->form->price,
                     "ilosc" => $this->form->ammount
-                ], [
+                        ], [
                     "idProduktu" => $this->form->id
                 ]);
             }

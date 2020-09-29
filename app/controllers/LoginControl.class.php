@@ -10,33 +10,27 @@ use core\SessionUtils;
 use core\Utils;
 use core\Validator;
 
+class LoginControl {
 
-class LoginControl
-{
     public $form;
     public $accountData;
 
-
-    public function __construct()
-    {
+    public function __construct() {
         $this->form = new LoginForm();
     }
 
-    public function action_login()
-    {
+    public function action_login() {
         $this->action_getLoginParams();
         $this->generateView();
     }
 
-    public function action_getLoginParams()
-    {
+    public function action_getLoginParams() {
         $this->form->login = ParamUtils::getFromRequest('login');
         $this->form->password = ParamUtils::getFromRequest('password');
-       // var_dump($this->form);
+        // var_dump($this->form);
     }
 
-    public function generateView()
-    {
+    public function generateView() {
         if ($this->validateLogin()) {
             SessionUtils::store("user_id", $this->accountData["user_id"]);
             SessionUtils::store("login", $this->form->login);
@@ -54,10 +48,10 @@ class LoginControl
         }
     }
 
-    public function validateLogin()
-    {
-       // echo __FUNCTION__;
-        if (!empty(SessionUtils::load("user_id", true))) return true;
+    public function validateLogin() {
+        // echo __FUNCTION__;
+        if (!empty(SessionUtils::load("user_id", true)))
+            return true;
 
 
         $v = new Validator();
@@ -72,24 +66,24 @@ class LoginControl
             'required_message' => 'Hasło jest wymagane',
         ]);
 
-        if (App::getMessages()->isError()) return false;
+        if (App::getMessages()->isError())
+            return false;
 
         try {
             $this->accountData = App::getDB()->get("uzytkownicy",
-                 [
-                    'user_id',
-                    'rola',
-                    'imie',
-                    'nazwisko'
-                ], [
-                    'login' => $this->form->login,
-                    'haslo' => $this->form->password
-                ]);
+                    [
+                        'user_id',
+                        'rola',
+                        'imie',
+                        'nazwisko'
+                    ], [
+                'login' => $this->form->login,
+                'haslo' => $this->form->password
+            ]);
 
             if (empty($this->accountData)) {
                 Utils::addErrorMessage("Nieprawidłowy login lub hasło");
             }
-             
         } catch (\PDOException $e) {
             echo $e->getMessage();
             Utils::addErrorMessage("Błąd połączenia z bazą danych");
@@ -98,12 +92,12 @@ class LoginControl
         return !App::getMessages()->isError();
     }
 
-    public function action_logout()
-    {
+    public function action_logout() {
         RoleUtils::removeRole("logged");
         SessionUtils::remove("id");
         SessionUtils::remove("login");
         session_destroy();
         App::getRouter()->redirectTo('login');
     }
+
 }

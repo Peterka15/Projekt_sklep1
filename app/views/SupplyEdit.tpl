@@ -23,7 +23,7 @@
         <thead>
         <tr>
             {if $rola == 'Admin'}
-                <th>id produktu</th>
+            <th>id produktu</th>
             {/if}
             <th>nazwa</th>
             <th>cena</th>
