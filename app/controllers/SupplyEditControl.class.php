@@ -134,9 +134,12 @@ class SupplyEditControl {
 
             try {
                 // 2. usunięcie rekordu
-                App::getDB()->update("produkty",[
-                    "zarchiwizowany" => true
-                ]);
+//                App::getDB()->update("produkty",[
+//                    "zarchiwizowany" => true
+//                ]);
+                  
+                
+                App::getDB()->query("UPDATE `produkty` SET `zarchiwizowany`= true WHERE `idProduktu` = ".$this->form->id);
                 Utils::addInfoMessage('Pomyślnie usunięto rekord');
             } catch (\PDOException $e) {
                 Utils::addErrorMessage('Wystąpił błąd podczas usuwania rekordu');

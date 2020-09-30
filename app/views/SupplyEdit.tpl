@@ -29,8 +29,12 @@
             <th>nazwa</th>
             <th>cena</th>
             <th>dostępna ilość</th>
+            {if $rola == 'User'}
+            <th>Zakupy</th>
+            {/if}
              {if $rola == 'Admin'}
             <th>Archiwalny</th>
+            <th>Opcje</th>
              {/if}
         </tr>
         </thead>
@@ -41,7 +45,6 @@
             {strip}
                 <tr>
                     
-                    <td></td>
                     {if $rola == 'Admin'}
                     <td>{$s["idProduktu"]}</td>{/if}
                     <td>{$s["nazwa"]}</td>
