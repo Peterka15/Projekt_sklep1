@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 22 Wrz 2020, 14:17
--- Wersja serwera: 10.4.14-MariaDB
--- Wersja PHP: 7.4.10
+-- Czas generowania: 30 Wrz 2020, 23:06
+-- Wersja serwera: 10.4.13-MariaDB
+-- Wersja PHP: 7.2.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -33,16 +34,6 @@ CREATE TABLE `koszyk` (
   `ilosc` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Zrzut danych tabeli `koszyk`
---
-
-INSERT INTO `koszyk` (`user_id`, `produkt_id`, `ilosc`) VALUES
-(1, 1, 1),
-(1, 2, 1),
-(1, 3, 1),
-(2, 3, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -53,17 +44,26 @@ CREATE TABLE `produkty` (
   `idProduktu` int(11) NOT NULL,
   `nazwa` varchar(45) DEFAULT NULL,
   `cena` float DEFAULT NULL,
-  `ilosc` int(11) DEFAULT NULL
+  `ilosc` int(11) DEFAULT NULL,
+  `zarchiwizowany` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Zrzut danych tabeli `produkty`
 --
 
-INSERT INTO `produkty` (`idProduktu`, `nazwa`, `cena`, `ilosc`) VALUES
-(1, 'Klawiatura', 100, 3),
-(2, 'Myszka', 150, 40),
-(3, 'Płot', 5, 30);
+INSERT INTO `produkty` (`idProduktu`, `nazwa`, `cena`, `ilosc`, `zarchiwizowany`) VALUES
+(80, 'Monitor', 21, 16, 0),
+(81, 'Monitor', 150, 1, 0),
+(82, 'Monitor', 12, 0, 0),
+(83, 'zapałki', 120, 2, 1),
+(84, 'zapałki', 120, 20, 1),
+(85, 'Monitor', 120, 32, 0),
+(86, '10', 333, 0, 0),
+(87, 'zapałki', 333, 0, 0),
+(88, 'Kaczka', 1000, 88, 1),
+(89, 'Kamień', 120, 8, 0),
+(90, 'kokos', 130, 211, 0);
 
 -- --------------------------------------------------------
 
@@ -75,8 +75,22 @@ CREATE TABLE `produkty_zamowienia` (
   `idZamowienia` int(11) NOT NULL,
   `idProduktu` int(11) NOT NULL,
   `cena` int(11) DEFAULT NULL,
-  `ilosc` int(11) DEFAULT NULL
+  `ilosc` int(11) DEFAULT NULL,
+  `nazwa` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `produkty_zamowienia`
+--
+
+INSERT INTO `produkty_zamowienia` (`idZamowienia`, `idProduktu`, `cena`, `ilosc`, `nazwa`) VALUES
+(70, 87, 333, 10, 'zapałki'),
+(71, 86, 333, 3, '10'),
+(71, 89, 120, 2, 'Kamień'),
+(72, 82, 12, 3, 'Monitor'),
+(72, 90, 130, 11, 'kokos'),
+(73, 80, 21, 4, 'Monitor'),
+(73, 81, 150, 2, 'Monitor');
 
 -- --------------------------------------------------------
 
@@ -98,8 +112,8 @@ CREATE TABLE `uzytkownicy` (
 --
 
 INSERT INTO `uzytkownicy` (`user_id`, `imie`, `nazwisko`, `rola`, `login`, `haslo`) VALUES
-(1, 'Jan', 'Kowalski', 'Admin', 'admin', 'admin'),
-(2, 'Adam', 'Kot', 'User', 'user', 'user');
+(1, 'Janusz', 'Tracz', 'Admin', 'admin', 'admin'),
+(2, 'Adam', 'Ryba', 'User', 'user', 'user');
 
 -- --------------------------------------------------------
 
@@ -109,9 +123,29 @@ INSERT INTO `uzytkownicy` (`user_id`, `imie`, `nazwisko`, `rola`, `login`, `hasl
 
 CREATE TABLE `zamowienia` (
   `idZamowienia` int(11) NOT NULL,
-  `data` date NOT NULL,
+  `data` datetime NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `zamowienia`
+--
+
+INSERT INTO `zamowienia` (`idZamowienia`, `data`, `user_id`) VALUES
+(60, '2020-09-30 15:14:34', 1),
+(61, '2020-09-30 15:24:40', 1),
+(62, '2020-09-30 16:02:38', 1),
+(63, '2020-09-30 16:03:03', 1),
+(64, '2020-09-30 16:03:52', 1),
+(65, '2020-09-30 16:08:38', 2),
+(66, '2020-09-30 16:09:24', 1),
+(67, '2020-09-30 16:11:05', 1),
+(68, '2020-09-30 16:38:44', 2),
+(69, '2020-09-30 21:31:32', 1),
+(70, '2020-09-30 22:34:38', 1),
+(71, '2020-09-30 22:49:27', 2),
+(72, '2020-09-30 22:56:35', 1),
+(73, '2020-09-30 22:59:47', 2);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -147,7 +181,7 @@ ALTER TABLE `uzytkownicy`
 --
 ALTER TABLE `zamowienia`
   ADD PRIMARY KEY (`idZamowienia`),
-  ADD KEY `fk_Zamówienia_Pracownicy1_idx` (`user_id`);
+  ADD KEY `fk_Zamowienia_Pracownicy1_idx` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -157,13 +191,19 @@ ALTER TABLE `zamowienia`
 -- AUTO_INCREMENT dla tabeli `produkty`
 --
 ALTER TABLE `produkty`
-  MODIFY `idProduktu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idProduktu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT dla tabeli `uzytkownicy`
 --
 ALTER TABLE `uzytkownicy`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT dla tabeli `zamowienia`
+--
+ALTER TABLE `zamowienia`
+  MODIFY `idZamowienia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- Ograniczenia dla zrzutów tabel
@@ -173,14 +213,14 @@ ALTER TABLE `uzytkownicy`
 -- Ograniczenia dla tabeli `produkty_zamowienia`
 --
 ALTER TABLE `produkty_zamowienia`
-  ADD CONSTRAINT `fk_Produkty_zamowienia_Produkty1` FOREIGN KEY (`idProduktu`) REFERENCES `produkty` (`idProduktu`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Produkty_zamowienia_Zamowienia1` FOREIGN KEY (`idZamowienia`) REFERENCES `zamowienia` (`idZamowienia`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_Produkty_zamowienia_Produkty1` FOREIGN KEY (`idProduktu`) REFERENCES `produkty` (`idProduktu`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_Produkty_zamowienia_Zamowienia1` FOREIGN KEY (`idZamowienia`) REFERENCES `zamowienia` (`idZamowienia`) ON DELETE CASCADE;
 
 --
 -- Ograniczenia dla tabeli `zamowienia`
 --
 ALTER TABLE `zamowienia`
-  ADD CONSTRAINT `fk_Zamówienia_Pracownicy1` FOREIGN KEY (`user_id`) REFERENCES `uzytkownicy` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_Zamowienia_Pracownicy1` FOREIGN KEY (`user_id`) REFERENCES `uzytkownicy` (`user_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
