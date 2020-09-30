@@ -97,7 +97,7 @@ class CartAPI {
                 $produkt_id = $pozycja['produkt_id'];
                 $produkt_ilosc = $pozycja['ilosc'];
                 
-               $ilosc= App::getDB()->query("SELECT `ilosc` FROM `produkty` WHERE `idProduktu` = $produkt_id" )->fetchAll();
+               $ilosc= App::getDB()->query("SELECT `ilosc` FROM `produkty` WHERE `idProduktu` = $produkt_id AND `zarchiwizowany` = 0" )->fetchAll();
                  
                
                

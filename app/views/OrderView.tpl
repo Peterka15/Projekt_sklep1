@@ -8,8 +8,10 @@
         
         <a href="{$conf->action_url}logout" class="pure-menu-heading pure-menu-link">wyloguj</a>
         <span style="float:right;">użytkownik: {$login} rola: {$rola}  id: {$user_id}</span>
+        
     </head>
     <body>
+          
     <legend>Zamówienia</legend>
     <div class="bottom-margin">
     </div>
@@ -52,9 +54,12 @@
                     </tr>
 
                 </tbody>
+                
             {/strip}
         {/foreach}
+        <a href="{$conf->action_url}supplyNew" class="pure-menu-heading pure-menu-link">Powrót</a>
     </body>
+    
 {/block}
 
 {include file='messages.tpl'}

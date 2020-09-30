@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.34-dev-7, created on 2020-09-29 23:10:00
+/* Smarty version 3.1.34-dev-7, created on 2020-09-30 16:40:00
   from 'E:\xampp\htdocs\Projekt_sklep1\app\views\SupplyEdit.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.34-dev-7',
-  'unifunc' => 'content_5f73a2a82ae668_09857916',
+  'unifunc' => 'content_5f7498c0a17775_67046778',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '9640832a154ed5725d3d9796b6a9fa2f3002d7d0' => 
     array (
       0 => 'E:\\xampp\\htdocs\\Projekt_sklep1\\app\\views\\SupplyEdit.tpl',
-      1 => 1601413799,
+      1 => 1601476799,
       2 => 'file',
     ),
   ),
@@ -21,7 +21,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:messages.tpl' => 1,
   ),
 ),false)) {
-function content_5f73a2a82ae668_09857916 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5f7498c0a17775_67046778 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_loadInheritance();
 $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 ?>
@@ -30,7 +30,7 @@ $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 
 
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1852765905f73a2a82433e6_16974126', 'content');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_16768894165f7498c09da610_57921511', 'content');
 ?>
 
 
@@ -46,12 +46,12 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_1852765905f73a2a82
 <?php $_smarty_tpl->inheritance->endChild($_smarty_tpl, "main.tpl");
 }
 /* {block 'content'} */
-class Block_1852765905f73a2a82433e6_16974126 extends Smarty_Internal_Block
+class Block_16768894165f7498c09da610_57921511 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'content' => 
   array (
-    0 => 'Block_1852765905f73a2a82433e6_16974126',
+    0 => 'Block_16768894165f7498c09da610_57921511',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -79,9 +79,11 @@ logout" class="pure-menu-heading pure-menu-link">wyloguj</a>
     <legend>Magazyn</legend>
     <div class="bottom-margin">
     </div>
-     <a href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_url;?>
-showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówienia</a>
-    <table id="tab_supply" class="pure-table pure-table-bordered">
+    <?php if ($_smarty_tpl->tpl_vars['rola']->value == 'User') {?> <a href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_url;?>
+showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówienia</a> <?php }?>
+    <?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin') {?> <a href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_url;?>
+showOrder" class="pure-menu-heading pure-menu-link">Zamówienia</a> <?php }?>
+    <table id="tab_supply" class="pure-table pure-table-bordered" border="1">
         <thead>
         <tr>
             <?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin') {?>
@@ -90,7 +92,9 @@ showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówie
             <th>nazwa</th>
             <th>cena</th>
             <th>dostępna ilość</th>
-
+             <?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin') {?>
+            <th>Archiwalny</th>
+             <?php }?>
         </tr>
         </thead>
         <tbody>
@@ -99,19 +103,23 @@ $_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->t
 if ($_from !== null) {
 foreach ($_from as $_smarty_tpl->tpl_vars['s']->value) {
 ?>
+            <?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin' || $_smarty_tpl->tpl_vars['s']->value["zarchiwizowany"] == 0) {?>
+                
             <tr><td></td><?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin') {?><td><?php echo $_smarty_tpl->tpl_vars['s']->value["idProduktu"];?>
 </td><?php }?><td><?php echo $_smarty_tpl->tpl_vars['s']->value["nazwa"];?>
 </td><td><?php echo $_smarty_tpl->tpl_vars['s']->value["cena"];?>
 </td><td id="produkt_<?php echo $_smarty_tpl->tpl_vars['s']->value["idProduktu"];?>
 "><?php echo $_smarty_tpl->tpl_vars['s']->value["ilosc"];?>
-</td><td><button onclick="postCart(<?php echo $_smarty_tpl->tpl_vars['user_id']->value;?>
+</td><?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin') {?><td><?php echo $_smarty_tpl->tpl_vars['s']->value["zarchiwizowany"];?>
+</td><?php }?><td><button onclick="postCart(<?php echo $_smarty_tpl->tpl_vars['user_id']->value;?>
 , [{'produkt_id': <?php echo $_smarty_tpl->tpl_vars['s']->value['idProduktu'];?>
 , 'ilosc': 1}], () => {getCart(<?php echo $_smarty_tpl->tpl_vars['user_id']->value;?>
 , (dane) => {KOSZYK = dane; renderTable(KOSZYK)})})">Dodaj do koszyka</button><?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin') {?><a class="button-small pure-button button-secondary" href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_url;?>
 supplyEdit/<?php echo $_smarty_tpl->tpl_vars['s']->value['idProduktu'];?>
 ">Edytuj</a>&nbsp;<a class="button-small pure-button button-warning" href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_url;?>
 supplyDelete/<?php echo $_smarty_tpl->tpl_vars['s']->value['idProduktu'];?>
-">Usuń</a><?php }?></td></tr>
+">Archiwizuj</a><?php }?></td></tr>
+         <?php }?>
         <?php
 }
 }

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.34-dev-7, created on 2020-09-29 21:02:19
+/* Smarty version 3.1.34-dev-7, created on 2020-09-30 04:45:13
   from 'E:\xampp\htdocs\Projekt_sklep1\app\views\OrderView.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.34-dev-7',
-  'unifunc' => 'content_5f7384bb65eba4_88365497',
+  'unifunc' => 'content_5f73f139820b01_97273826',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '2a079030655eed56b216df9dc25581aa64e3a061' => 
     array (
       0 => 'E:\\xampp\\htdocs\\Projekt_sklep1\\app\\views\\OrderView.tpl',
-      1 => 1601406135,
+      1 => 1601433907,
       2 => 'file',
     ),
   ),
@@ -21,14 +21,14 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:messages.tpl' => 1,
   ),
 ),false)) {
-function content_5f7384bb65eba4_88365497 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5f73f139820b01_97273826 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_loadInheritance();
 $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_7354183215f7384bb641bd8_98552874', 'content');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_9458771815f73f139808723_15191257', 'content');
 ?>
 
 
@@ -36,12 +36,12 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_7354183215f7384bb6
 $_smarty_tpl->inheritance->endChild($_smarty_tpl, "main.tpl");
 }
 /* {block 'content'} */
-class Block_7354183215f7384bb641bd8_98552874 extends Smarty_Internal_Block
+class Block_9458771815f73f139808723_15191257 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'content' => 
   array (
-    0 => 'Block_7354183215f7384bb641bd8_98552874',
+    0 => 'Block_9458771815f73f139808723_15191257',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -58,8 +58,10 @@ logout" class="pure-menu-heading pure-menu-link">wyloguj</a>
  rola: <?php echo $_smarty_tpl->tpl_vars['rola']->value;?>
   id: <?php echo $_smarty_tpl->tpl_vars['user_id']->value;?>
 </span>
+        
     </head>
     <body>
+          
     <legend>Zamówienia</legend>
     <div class="bottom-margin">
     </div>
@@ -101,7 +103,10 @@ foreach ($_from as $_smarty_tpl->tpl_vars['r']->value) {
 }
 }
 $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);?>
+        <a href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_url;?>
+supplyNew" class="pure-menu-heading pure-menu-link">Powrót</a>
     </body>
+    
 <?php
 }
 }

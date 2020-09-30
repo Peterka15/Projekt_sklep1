@@ -19,10 +19,12 @@ class SupplyEditControl {
         //stworzenie potrzebnych obiektów
         $this->form = new SupplyForm();
         $this->login = SessionUtils::load('login', true);
+        $this->rola = SessionUtils::load("rola", true);
     }
 
     public function validateSave() {
         //0. Pobranie parametrów z walidacją
+        $this->form->id = ParamUtils::getFromPost('id', true, 'Błędne wywołanie aplikacji');
         $this->form->name = ParamUtils::getFromRequest('name', true, 'Błędne wywołanie aplikacji');
         $this->form->price = ParamUtils::getFromRequest('cena', true, 'Błędne wywołanie aplikacji');
         $this->form->ammount = ParamUtils::getFromRequest('ilosc', true, 'Błędne wywołanie aplikacji');
@@ -65,6 +67,7 @@ class SupplyEditControl {
                 "nazwa",
                 "cena",
                 "ilosc",
+                "zarchiwizowany"
             ]);
         } catch (\PDOException $e) {
             Utils::addErrorMessage('Wystąpił błąd podczas pobierania rekordów');
@@ -81,31 +84,17 @@ class SupplyEditControl {
         App::getSmarty()->assign('supply', $this->records);  // lista rekordów z bazy danych
         App::getSmarty()->assign('login', $this->login);  // lista rekordów z bazy danych
         App::getSmarty()->assign('rola', $this->rola);
+        
         App::getSmarty()->display('SupplyEdit.tpl');
     }
+    
+   
 
     //wysiweltenie rekordu do edycji wskazanego parametrem 'id'
 
     public function action_supplyEdit() {
         // 1. walidacja id osoby do edycji
-        if ($this->validateEdit()) {
-
-            try {
-                $this->records = App::getDB()->select("produkty", [
-                    "idProduktu",
-                    "nazwa",
-                    "cena",
-                    "ilosc",
-                ]);
-            } catch (\PDOException $e) {
-                Utils::addErrorMessage('Wystąpił błąd podczas pobierania rekordów');
-                if (App::getConf()->debug)
-                    Utils::addErrorMessage($e->getMessage());
-                else
-                    $this->generateView();
-            }
-
-
+        if ($this->validateEdit()) ;
             try {
                 // 2. odczyt z bazy danych osoby o podanym ID (tylko jednego rekordu)
                 $record = App::getDB()->get("produkty", "*", [
@@ -121,10 +110,14 @@ class SupplyEditControl {
                 if (App::getConf()->debug)
                     Utils::addErrorMessage($e->getMessage());
             }
-        }
+        
 
-        // 3. Wygenerowanie widoku
-        $this->generateView();
+        $this->supplyEditView();
+    }
+    public function supplyEditView() {
+       App::getSmarty()->assign('form', $this->form); // dane formularza dla widoku
+       App::getSmarty()->display('SupplyEdition.tpl');
+        
     }
 
     public function validateEdit() {
@@ -141,8 +134,8 @@ class SupplyEditControl {
 
             try {
                 // 2. usunięcie rekordu
-                App::getDB()->delete("produkty", [
-                    "idProduktu" => $this->form->id
+                App::getDB()->update("produkty",[
+                    "zarchiwizowany" => true
                 ]);
                 Utils::addInfoMessage('Pomyślnie usunięto rekord');
             } catch (\PDOException $e) {
@@ -182,6 +175,10 @@ class SupplyEditControl {
                 }
             } else {
                 //2.2 Edycja rekordu o danym ID
+//                
+//                $record = App::getDB()->get("produkty", "*", [
+//                    "idProduktu" => $this->form->id
+//                 ]);
                 App::getDB()->update("produkty", [
                     "nazwa" => $this->form->name,
                     "cena" => $this->form->price,

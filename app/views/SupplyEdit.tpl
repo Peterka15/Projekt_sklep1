@@ -18,8 +18,9 @@
     <legend>Magazyn</legend>
     <div class="bottom-margin">
     </div>
-     <a href="{$conf->action_url}showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówienia</a>
-    <table id="tab_supply" class="pure-table pure-table-bordered">
+    {if $rola =='User'} <a href="{$conf->action_url}showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówienia</a> {/if}
+    {if $rola =='Admin'} <a href="{$conf->action_url}showOrder" class="pure-menu-heading pure-menu-link">Zamówienia</a> {/if}
+    <table id="tab_supply" class="pure-table pure-table-bordered" border="1">
         <thead>
         <tr>
             {if $rola == 'Admin'}
@@ -28,36 +29,45 @@
             <th>nazwa</th>
             <th>cena</th>
             <th>dostępna ilość</th>
-
+             {if $rola == 'Admin'}
+            <th>Archiwalny</th>
+             {/if}
         </tr>
         </thead>
         <tbody>
         {foreach $supply as $s}
+            {if $rola == 'Admin' || $s["zarchiwizowany"]== 0 }
+                
             {strip}
                 <tr>
+                    
                     <td></td>
                     {if $rola == 'Admin'}
                     <td>{$s["idProduktu"]}</td>{/if}
                     <td>{$s["nazwa"]}</td>
                     <td>{$s["cena"]}</td>
                     <td id="produkt_{$s["idProduktu"]}">{$s["ilosc"]}</td>
-
+                     {if $rola == 'Admin'}
+                    <td>{$s["zarchiwizowany"]}</td>
+                     {/if}
                     <td>
                         <button onclick="{literal}postCart({/literal}{$user_id}{literal}, [{'produkt_id': {/literal}{$s['idProduktu']}{literal}, 'ilosc': 1}], () => {getCart({/literal}{$user_id}{literal}, (dane) => {KOSZYK = dane; renderTable(KOSZYK)})}){/literal}">
                             Dodaj do koszyka
                         </button>
+                            
                         {if $rola == 'Admin'}
                             <a class="button-small pure-button button-secondary"
                                href="{$conf->action_url}supplyEdit/{$s['idProduktu']}">Edytuj</a>
                             &nbsp;
                             <a class="button-small pure-button button-warning"
-                               href="{$conf->action_url}supplyDelete/{$s['idProduktu']}">Usuń</a>
+                               href="{$conf->action_url}supplyDelete/{$s['idProduktu']}">Archiwizuj</a>
                         {/if}
                     </td>
 
 
                 </tr>
             {/strip}
+         {/if}
         {/foreach}
         
 
