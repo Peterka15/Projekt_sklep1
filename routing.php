@@ -21,6 +21,7 @@ Utils::addRoute('cartGet',    'CartAPI');
 Utils::addRoute('cartPost',  'CartAPI');
 Utils::addRoute('getOrder', 'OrderControl');
 Utils::addRoute('showOrder', 'OrderControl');
+Utils::addRoute('supplySearch', 'SupplyEditControl');
 
 
 //Utils::addRoute('action_name', 'controller_class_name');

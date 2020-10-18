@@ -14,8 +14,11 @@ class SupplyEditControl {
     private $records;
     private $login;
     private $rola;
-   
-   
+    private $search;
+
+    private $paginationAmount = 5;
+    private $pagesAmount = 1;
+
 
     public function __construct() {
         //stworzenie potrzebnych obiektów
@@ -26,14 +29,16 @@ class SupplyEditControl {
 
     public function validateSave() {
         //0. Pobranie parametrów z walidacją
-        $this->form->id = ParamUtils::getFromPost('id', true, 'Błędne wywołanie aplikacji');
-        $this->form->name = ParamUtils::getFromRequest('name', true, 'Błędne wywołanie aplikacji');
-        $this->form->price = ParamUtils::getFromRequest('cena', true, 'Błędne wywołanie aplikacji');
-        $this->form->ammount = ParamUtils::getFromRequest('ilosc', true, 'Błędne wywołanie aplikacji');
+//        $this->form->id = ParamUtils::getFromPost('id', true, 'Błędne wywołanie aplikacji: id');
+        $this->form->name = ParamUtils::getFromRequest('name', true, 'Błędne wywołanie aplikacji: name');
+        $this->form->price = ParamUtils::getFromRequest('cena', true, 'Błędne wywołanie aplikacji: price');
+        $this->form->ammount = ParamUtils::getFromRequest('ilosc', true, 'Błędne wywołanie aplikacji: amount');
         $this->form->wyszukiwanie = ParamUtils::getFromRequest('sf_search');
 
-        if (App::getMessages()->isError())
+        if (App::getMessages()->isError()){
+            
             return false;
+        }
 
         // 1. sprawdzenie czy wartości wymagane nie są puste
         if (empty(trim($this->form->name))) {
@@ -46,8 +51,10 @@ class SupplyEditControl {
             Utils::addErrorMessage('Podaj ilość');
         }
 
-        if (App::getMessages()->isError())
+        if (App::getMessages()->isError()) {
+          
             return false;
+        }
 
 
         return !App::getMessages()->isError();
@@ -66,10 +73,22 @@ class SupplyEditControl {
         $this->form = new SupplyForm();
         $this->validateSave();
         
-        $request = $this->form->wyszukiwanie;
-        
+        $query = $this->form->wyszukiwanie;
+
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 0;
+
         try {
-            $this->records = App::getDB()->query("SELECT * FROM `produkty` WHERE `nazwa` LIKE '$request%' LIMIT 20");
+            $records = App::getDB()->query("SELECT count(`idProduktu`) FROM `produkty` WHERE `nazwa` LIKE '$query%'")->fetch()[0];
+            $this->pagesAmount = ceil($records / $this->paginationAmount);
+
+            if($page > $this->pagesAmount){
+                $page = 0;
+            }
+
+            $index = $page * $this->paginationAmount;
+            $limit = $index . ', ' . $this->paginationAmount;
+
+            $this->records = App::getDB()->query("SELECT * FROM `produkty` WHERE `nazwa` LIKE '$query%' LIMIT $limit");
         } catch (\PDOException $e) {
             Utils::addErrorMessage('Wystąpił błąd podczas pobierania rekordów');
             if (App::getConf()->debug)
@@ -85,6 +104,8 @@ class SupplyEditControl {
         App::getSmarty()->assign('supply', $this->records);  // lista rekordów z bazy danych
         App::getSmarty()->assign('login', $this->login);  // lista rekordów z bazy danych
         App::getSmarty()->assign('rola', $this->rola);
+        App::getSmarty()->assign('wyszukiwanie', $this->form->wyszukiwanie);
+        App::getSmarty()->assign('pagesAmount', $this->pagesAmount);
         
         App::getSmarty()->display('SupplyEdit.tpl');
     }
@@ -93,7 +114,6 @@ class SupplyEditControl {
         $this->load_data();
         App::getSmarty()->assign('searchForm', $this->form); // dane formularza (wyszukiwania w tym wypadku)
         App::getSmarty()->assign('produkty', $this->records);  // lista rekordów z bazy danych
-         App::getSmarty()->assign('wyszukiwanie', $this->form->wyszukiwanie);                                     
         App::getSmarty()->display('SupplyEdit.tpl');
     }
    
@@ -102,6 +122,7 @@ class SupplyEditControl {
 
     public function action_supplyEdit() {
         // 1. walidacja id osoby do edycji
+         $this->form->wyszukiwanie = ParamUtils::getFromRequest('sf_search');
         if ($this->validateEdit()) ;
             try {
                 // 2. odczyt z bazy danych osoby o podanym ID (tylko jednego rekordu)
@@ -122,6 +143,14 @@ class SupplyEditControl {
 
         $this->supplyEditView();
     }
+    
+    public function action_supplySearch(){
+         $this->form->wyszukiwanie = ParamUtils::getFromRequest('sf_search');
+   
+         $this->action_supplyNew();
+       
+    }
+    
     public function supplyEditView() {
        App::getSmarty()->assign('form', $this->form); // dane formularza dla widoku
        App::getSmarty()->display('SupplyEdition.tpl');
@@ -169,10 +198,10 @@ class SupplyEditControl {
         try {
 
             //2.1 Nowy rekord
-            if ($this->form->id == '') {
+            if ($this->form->id == '' || !$this->form->id) {
                 //sprawdź liczebność rekordów - nie pozwalaj przekroczyć 20
                 $count = App::getDB()->count("produkty");
-                if ($count <= 20) {
+                if ($count <= 100) {
                     App::getDB()->insert("produkty", [
                         "nazwa" => $this->form->name,
                         "cena" => $this->form->price,
