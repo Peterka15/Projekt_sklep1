@@ -20,6 +20,12 @@
     </div>
     {if $rola =='User'} <a href="{$conf->action_url}showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówienia</a> {/if}
     {if $rola =='Admin'} <a href="{$conf->action_url}showOrder" class="pure-menu-heading pure-menu-link">Zamówienia</a> {/if}
+    <form id="search-form" class="pure-form pure-form-stacked" onsubmit="ajaxPostForm('search-form','{$conf->action_root}SupplyList','table'); return false;">
+    <legend>Opcje wyszukiwania</legend>
+	<fieldset>
+		<input type="text" placeholder="Nazwa produktu" name="sf_search"  /><br />
+		<button type="submit" class="pure-button pure-button-primary">Filtruj</button>
+	</fieldset>
     <table id="tab_supply" class="pure-table pure-table-bordered" border="1">
         <thead>
         <tr>

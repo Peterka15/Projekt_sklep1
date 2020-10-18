@@ -8,5 +8,5 @@ class SupplyForm
     public $name;
     public $price;
     public $ammount;
-    
+    public $wyszukiwanie;
 }

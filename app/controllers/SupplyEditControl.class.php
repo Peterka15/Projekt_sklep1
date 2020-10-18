@@ -14,6 +14,8 @@ class SupplyEditControl {
     private $records;
     private $login;
     private $rola;
+   
+   
 
     public function __construct() {
         //stworzenie potrzebnych obiektów
@@ -28,6 +30,7 @@ class SupplyEditControl {
         $this->form->name = ParamUtils::getFromRequest('name', true, 'Błędne wywołanie aplikacji');
         $this->form->price = ParamUtils::getFromRequest('cena', true, 'Błędne wywołanie aplikacji');
         $this->form->ammount = ParamUtils::getFromRequest('ilosc', true, 'Błędne wywołanie aplikacji');
+        $this->form->wyszukiwanie = ParamUtils::getFromRequest('sf_search');
 
         if (App::getMessages()->isError())
             return false;
@@ -60,15 +63,13 @@ class SupplyEditControl {
     //validacja danych przed wyswietleniem do edycji
 
     public function supplyList() {
-
+        $this->form = new SupplyForm();
+        $this->validateSave();
+        
+        $request = $this->form->wyszukiwanie;
+        
         try {
-            $this->records = App::getDB()->select("produkty", [
-                "idProduktu",
-                "nazwa",
-                "cena",
-                "ilosc",
-                "zarchiwizowany"
-            ]);
+            $this->records = App::getDB()->query("SELECT * FROM `produkty` WHERE `nazwa` LIKE '$request%' LIMIT 20");
         } catch (\PDOException $e) {
             Utils::addErrorMessage('Wystąpił błąd podczas pobierania rekordów');
             if (App::getConf()->debug)
@@ -88,6 +89,13 @@ class SupplyEditControl {
         App::getSmarty()->display('SupplyEdit.tpl');
     }
     
+     public function action_SupplyList() {
+        $this->load_data();
+        App::getSmarty()->assign('searchForm', $this->form); // dane formularza (wyszukiwania w tym wypadku)
+        App::getSmarty()->assign('produkty', $this->records);  // lista rekordów z bazy danych
+         App::getSmarty()->assign('wyszukiwanie', $this->form->wyszukiwanie);                                     
+        App::getSmarty()->display('SupplyEdit.tpl');
+    }
    
 
     //wysiweltenie rekordu do edycji wskazanego parametrem 'id'

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.34-dev-7, created on 2020-09-30 22:59:26
+/* Smarty version 3.1.34-dev-7, created on 2020-10-18 21:26:11
   from 'E:\xampp\htdocs\Projekt_sklep1\app\views\SupplyEdit.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.34-dev-7',
-  'unifunc' => 'content_5f74f1aedc6b01_30738311',
+  'unifunc' => 'content_5f8c96d3c6c5c5_05145948',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '9640832a154ed5725d3d9796b6a9fa2f3002d7d0' => 
     array (
       0 => 'E:\\xampp\\htdocs\\Projekt_sklep1\\app\\views\\SupplyEdit.tpl',
-      1 => 1601499566,
+      1 => 1603049171,
       2 => 'file',
     ),
   ),
@@ -21,7 +21,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
     'file:messages.tpl' => 1,
   ),
 ),false)) {
-function content_5f74f1aedc6b01_30738311 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5f8c96d3c6c5c5_05145948 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_loadInheritance();
 $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 ?>
@@ -30,7 +30,7 @@ $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 
 
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_15972313975f74f1aed8ee46_17629700', 'content');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_4270979575f8c96d3c43588_61932720', 'content');
 ?>
 
 
@@ -46,12 +46,12 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_15972313975f74f1ae
 <?php $_smarty_tpl->inheritance->endChild($_smarty_tpl, "main.tpl");
 }
 /* {block 'content'} */
-class Block_15972313975f74f1aed8ee46_17629700 extends Smarty_Internal_Block
+class Block_4270979575f8c96d3c43588_61932720 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'content' => 
   array (
-    0 => 'Block_15972313975f74f1aed8ee46_17629700',
+    0 => 'Block_4270979575f8c96d3c43588_61932720',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -83,6 +83,13 @@ logout" class="pure-menu-heading pure-menu-link">wyloguj</a>
 showOrder" class="pure-menu-heading pure-menu-link">Twoje wcześniejsze zamówienia</a> <?php }?>
     <?php if ($_smarty_tpl->tpl_vars['rola']->value == 'Admin') {?> <a href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_url;?>
 showOrder" class="pure-menu-heading pure-menu-link">Zamówienia</a> <?php }?>
+    <form id="search-form" class="pure-form pure-form-stacked" onsubmit="ajaxPostForm('search-form','<?php echo $_smarty_tpl->tpl_vars['conf']->value->action_root;?>
+SupplyList','table'); return false;">
+    <legend>Opcje wyszukiwania</legend>
+	<fieldset>
+		<input type="text" placeholder="Nazwa produktu" name="sf_search"  /><br />
+		<button type="submit" class="pure-button pure-button-primary">Filtruj</button>
+	</fieldset>
     <table id="tab_supply" class="pure-table pure-table-bordered" border="1">
         <thead>
         <tr>
